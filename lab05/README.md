@@ -1,21 +1,46 @@
-Laborator 05 - Recomandări content-based folosind Cosine Similarity
-====================================================================
+# Laborator 05 — Recomandări Content-Based folosind Cosine Similarity
 
-1. Dataset utilizat:
-Fișierul `tesco_sample.json`, care conține produse din catalogul supermarket-urilor Tesco, având un câmp dedicat `description` cu descrieri detaliate în format text și marcaje HTML.
+Implementarea algoritmului de filtrare bazată pe conținut (**Content-Based Filtering**) prin calculul similarității cosinus (**Cosine Similarity**) peste descrierile textuale ale produselor.
 
-2. Preprocesare și implementare:
-- S-au eliminat produsele fără descriere și s-au curățat tag-urile HTML (<p>, <br>, <li> etc.) folosind expresii regulate (`re.sub(r"<[^>]+>", " ", text)`).
-- Textul a fost convertit la litere mici (lowercase), iar cifrele și caracterele speciale au fost eliminate.
-- S-a aplicat `TfidfVectorizer(stop_words="english")` din `scikit-learn` pentru a transforma descrierile în vectori numerici TF-IDF (rezultând un vocabular de 3691 de cuvinte unice).
-- S-a calculat matricea de similaritate folosind `cosine_similarity`.
+---
 
-3. Exemplu de pereche similară identificată:
-- Produs 1: Dragon Universal All Purpose Filler 330G
-- Produs 2: Dragon Universal All Purpose Filler 1.5 Kilograms
-- Scor Cosine Similarity: 0.9950
+## 1. Dataset Utilizat
+- **Fișier:** `tesco_sample.json`
+- **Structură:** Catalog de produse din supermarket-urile Tesco, fiecare intrare având un câmp dedicat `description` ce conține descrierea detaliată a produsului (inclusiv marcaje HTML).
+- **Dimensiune vocabular procesat:** 3.691 cuvinte unice.
 
-Justificare:
-Această asociere are sens pe deplin: cele două produse reprezintă același tip de chit universal pentru reparații interioare („Dragon Universal All Purpose Filler”), diferența constând doar în gramajul ambalajului (330g vs. 1.5 kg). Datorită descrierilor aproape identice privind proprietățile și modul de utilizare („sands down to a smooth paintable white finish, a handy solution for small home repairs, high adhesion...”), scorul de similaritate cosinus este foarte ridicat (0.9950).
+---
 
-Un alt exemplu relevant observat în matricea de similaritate este perechea formată din „Bondi Sands Aero Self Tanning Foam 225Ml” și „Bondi Sands 1 Hour Express Foam 225Ml” (scor 0.91), ambele fiind spume autobronzante din aceeași gamă de produse cosmetice.
+## 2. Pipeline de Preprocesare și Implementare (`cosine_similarity_tesco.py`)
+
+1. **Curățare HTML și filtrare:** S-au eliminat înregistrările fără descriere, iar tag-urile HTML (ex. `<p>`, `<br>`, `<li>`) au fost eliminate folosind expresia regulată `re.sub(r"<[^>]+>", " ", text)`.
+2. **Normalizare text:** Descrierile au fost convertite la litere mici (*lowercase*), eliminând cifrele, semnele de punctuație și spațiile multiple.
+3. **Vectorizare TF-IDF:** Textele curățate au fost transformate în vectori numerici folosind `TfidfVectorizer(stop_words="english")` din biblioteca `scikit-learn`.
+4. **Matricea de similaritate:** S-a calculat similaritatea cosinus între toate perechile de produse cu funcția `cosine_similarity`, salvând și o vizualizare tip heatmap (`cosine_similarity_tesco_heatmap.png`) pentru primele 10 produse.
+
+---
+
+## 3. Rezultate și Perechi Similare Identificate
+
+| Loc | Produs 1 | Produs 2 | Scor Cosine Similarity |
+| :---: | :--- | :--- | :---: |
+| **1** | **Dragon Universal All Purpose Filler 330G** | **Dragon Universal All Purpose Filler 1.5 Kilograms** | **0.9950** |
+| **2** | **Bondi Sands Aero Self Tanning Foam 225Ml** | **Bondi Sands 1 Hour Express Foam 225Ml** | **0.9100** |
+| **3** | **Skinny Tan Gradual Tanner 125Ml** | **Skinny Tan Coconut Water Tanning Mist 150Ml** | **0.7100** |
+
+### Justificarea exemplului principal (`0.9950`)
+Asocierea dintre **Dragon Universal All Purpose Filler 330G** și **Dragon Universal All Purpose Filler 1.5 Kilograms** are sens pe deplin: cele două intrări reprezintă exact același produs (chit universal pentru reparații interioare), diferența constând exclusiv în gramajul ambalajului (330 g vs. 1,5 kg). Datorită descrierilor aproape identice privind proprietățile și modul de utilizare (*„sands down to a smooth paintable white finish, a handy solution for small home repairs, high adhesion...”*), algoritmul le-a identificat corect ca fiind cele mai asemănătoare produse din setul de date.
+
+---
+
+## 4. Vizualizare Matrice Similaritate (Top 10 Produse)
+
+![Matricea Cosine Similarity](cosine_similarity_tesco_heatmap.png)
+
+---
+
+## 5. Instrucțiuni de Rulare
+
+```bash
+pip install pandas numpy scikit-learn matplotlib seaborn
+python cosine_similarity_tesco.py
