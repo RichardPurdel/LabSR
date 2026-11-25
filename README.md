@@ -61,3 +61,24 @@ Toate cele **187 de serii manga** au fost încărcate cu succes în platforma Re
 Instalați pachetele necesare:
 ```bash
 pip install pandas recombee-api-client
+---
+
+## 5. Recomandări Content-Based folosind Cosine Similarity (Laborator 5)
+
+Calculul similarității între seriile manga fără a depinde de interacțiunile utilizatorilor (Content-Based Filtering) este implementat local în scriptul `cosine_similarity_manga.py`.
+
+### Detalii de implementare:
+1. **Construirea profilului textual:** Deoarece setul de date nu conține un câmp de tip sinopsis, s-a creat o descriere compusă prin concatenarea atributelor textuale relevante (`Manga series`, `Author(s)`, `Publisher`, `Demographic`).
+2. **Preprocesare și Vectorizare TF-IDF:** Textul a fost normalizat (conversie la litere mici, eliminarea caracterelor speciale și a cifrelor prin expresii regulate) și transformat într-o matrice de ponderi TF-IDF de dimensiune `(187, 709)` folosind `TfidfVectorizer(stop_words='english')`.
+3. **Matricea de similaritate:** S-a calculat similaritatea cosinus între toți cei 187 de vectori prin `cosine_similarity`, generând o matrice simetrică `187 x 187` și o vizualizare tip heatmap (`cosine_similarity_heatmap.png`) pentru primele 10 serii.
+
+### Rezultate și Perechi Similare Identificate:
+
+| Loc | Produs 1 | Produs 2 | Scor Cosine Similarity | Justificare |
+| :--- | :--- | :--- | :---: | :--- |
+| **1** | **Touch** | **H2** | **0.8096** | Același autor (*Mitsuru Adachi*), editură (*Shogakukan*), demografie (*Shōnen*) și gen (manga sportivă despre baseball). |
+| **2** | **Crows** | **Worst** | **0.6870** | Același autor (*Hiroshi Takahashi*), editură (*Akita Shoten*) și demografie (*Shōnen*); *Worst* este continuarea directă (sequel) a seriei *Crows*. |
+| **3** | **Yawara!** | **Monster** | **0.6415** | Același autor (*Naoki Urasawa*), editură (*Shogakukan*) și public țintă (*Seinen*). |
+
+**Analiză exemplu principal (`Touch` ↔ `H2` — scor `0.8096`):**  
+Asocierea are sens atât din punct de vedere al metadatelor, cât și al conținutului real: ambele serii sunt scrise și ilustrate de Mitsuru Adachi, publicate de Shogakukan pentru publicul *Shōnen* și abordează aceeași tematică centrală (baseball-ul de liceu), reprezentând recomandări naturale pentru cititorii oricăreia dintre cele două serii.
