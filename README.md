@@ -55,14 +55,6 @@ Toate cele **187 de serii manga** au fost încărcate cu succes în platforma Re
 
 ---
 
-## 5. Instrucțiuni de Rulare
-
-### Cerințe preliminare
-Instalați pachetele necesare:
-```bash
-pip install pandas recombee-api-client
----
-
 ## 5. Recomandări Content-Based folosind Cosine Similarity (Laborator 5)
 
 Calculul similarității între seriile manga fără a depinde de interacțiunile utilizatorilor (Content-Based Filtering) este implementat local în scriptul `cosine_similarity_manga.py`.
@@ -82,3 +74,12 @@ Calculul similarității între seriile manga fără a depinde de interacțiunil
 
 **Analiză exemplu principal (`Touch` ↔ `H2` — scor `0.8096`):**  
 Asocierea are sens atât din punct de vedere al metadatelor, cât și al conținutului real: ambele serii sunt scrise și ilustrate de Mitsuru Adachi, publicate de Shogakukan pentru publicul *Shōnen* și abordează aceeași tematică centrală (baseball-ul de liceu), reprezentând recomandări naturale pentru cititorii oricăreia dintre cele două serii.
+
+---
+
+## 6. Instrucțiuni de Rulare
+
+### Cerințe preliminare
+Instalați pachetele necesare:
+```bash
+pip install pandas numpy scikit-learn matplotlib seaborn recombee-api-client
